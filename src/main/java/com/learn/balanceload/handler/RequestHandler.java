@@ -4,6 +4,7 @@ import com.learn.balanceload.balancer.LoadBalancer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 public class RequestHandler implements HttpHandler {
@@ -13,6 +14,18 @@ public class RequestHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+
+        String response = "Hello, World!"; // Response message
+
+        // Set response headers
+        exchange.getResponseHeaders().set("Content-Type", "text/plain");
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+
+        // Get output stream and write response
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+
         String requestURI = exchange.getRequestURI().toString();
         String targetServer = getNextServer();
         String targetURL = targetServer + requestURI;

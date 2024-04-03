@@ -9,6 +9,13 @@ import java.net.URL;
 public class LoadBalancer {
 
     public static void forwardRequest(String targetURL, HttpExchange exchange) throws IOException {
+
+        String response = "Hello, World!"; // Response message
+
+        // Set response headers
+        exchange.getResponseHeaders().set("Content-Type", "text/plain");
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+
         URL url = new URL(targetURL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(exchange.getRequestMethod());
