@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.learn.balanceload.handler.CorsHandler;
 import com.learn.balanceload.handler.RequestHandler;
 import com.sun.net.httpserver.HttpServer;
 
@@ -13,13 +15,22 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        backendServers.add("http://backend1:8080");
-        backendServers.add("http://backend2:8080");
+        backendServers.add("http://localhost:8080");
+        backendServers.add("http://localhost:8081");
 
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/", new RequestHandler());
-        server.setExecutor(null); // creates a default executor
+        HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
+        // Register CorsHandler to handle CORS-related requests
+        server.createContext("/", new CorsHandler());
+
+        // Register RequestHandler to handle actual requests
+        server.createContext("/api", new RequestHandler());
+
+        // Set a default executor
+        server.setExecutor(null);
+
+        // Start the server
         server.start();
-        System.out.println("Hello, World!");
+
+        System.out.println("Load balancer is running on port 8082");
     }
 }

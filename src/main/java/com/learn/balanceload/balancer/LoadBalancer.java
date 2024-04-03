@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;public class LoadBalancer {
+import java.net.URL;
+public class LoadBalancer {
 
     public static void forwardRequest(String targetURL, HttpExchange exchange) throws IOException {
         URL url = new URL(targetURL);
@@ -17,7 +18,8 @@ import java.net.URL;public class LoadBalancer {
             String key = entry.getKey();
             entry.getValue().forEach(value -> connection.setRequestProperty(key, value));
         });
-
+        // Print the target URL
+        System.out.println("Forwarding request to: " + targetURL);
         connection.setDoOutput(true);
         InputStream is = exchange.getRequestBody();
         OutputStream os = connection.getOutputStream();
@@ -28,6 +30,8 @@ import java.net.URL;public class LoadBalancer {
         }
         os.close();
         is.close();
+        // Print the response code received from the backend server
+        System.out.println("Response code from backend: " + connection.getResponseCode());
 
         // Copy response from the backend server to the original response
         exchange.getResponseHeaders().putAll(connection.getHeaderFields());
@@ -42,5 +46,8 @@ import java.net.URL;public class LoadBalancer {
         outputStream.close();
         inputStream.close();
         connection.disconnect();
+        // Print when request processing is complete
+        System.out.println("Request processed successfully.");
+
     }
 }

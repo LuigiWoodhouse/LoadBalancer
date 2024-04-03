@@ -17,12 +17,19 @@ public class RequestHandler implements HttpHandler {
         String targetServer = getNextServer();
         String targetURL = targetServer + requestURI;
 
+        // Print the target URL before forwarding the request
+        System.out.println("Forwarding request to backend server: " + targetURL);
+
         // Forward request to backend server
         LoadBalancer.forwardRequest(targetURL, exchange);
     }
     private static synchronized String getNextServer() {
         String server = backendServers.get(currentIndex);
         currentIndex = (currentIndex + 1) % backendServers.size();
+
+        // Print the selected backend server
+        System.out.println("Selected backend server: " + server);
+
         return server;
     }
 }
