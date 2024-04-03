@@ -18,7 +18,7 @@ public class RequestHandler implements HttpHandler {
         backendServers.add("http://localhost:8080");
         backendServers.add("http://localhost:8081");
 
-        String response = "Hello, World!";
+        String response = "My Name is Captain Jeppo";
 
         // Set response headers
         exchange.getResponseHeaders().set("Content-Type", "text/plain");
@@ -40,7 +40,10 @@ public class RequestHandler implements HttpHandler {
         LoadBalancer.forwardRequest(targetURL, exchange);
     }
     private static synchronized String getNextServer() {
+        //fetch instances of the service
         String server = backendServers.get(currentIndex);
+
+        //go to next server based on the index in the list
         currentIndex = (currentIndex + 1) % backendServers.size();
 
         // Print the selected backend server

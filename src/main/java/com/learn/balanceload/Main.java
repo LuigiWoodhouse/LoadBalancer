@@ -18,6 +18,7 @@ public class Main {
         server.createContext("/api", new RequestHandler());
 
         // Set a default executor
+        //instruct server to handle requests using the default executor provided by the server implementation itself.
         server.setExecutor(null);
 
         // Start the server
