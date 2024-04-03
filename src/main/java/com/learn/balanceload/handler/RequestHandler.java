@@ -15,7 +15,10 @@ public class RequestHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
-        String response = "Hello, World!"; // Response message
+        backendServers.add("http://localhost:8080");
+        backendServers.add("http://localhost:8081");
+
+        String response = "Hello, World!";
 
         // Set response headers
         exchange.getResponseHeaders().set("Content-Type", "text/plain");
