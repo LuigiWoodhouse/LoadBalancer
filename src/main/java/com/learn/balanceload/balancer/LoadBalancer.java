@@ -19,6 +19,8 @@ public class LoadBalancer {
         URL url = new URL(targetURL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(exchange.getRequestMethod());
+      // Copy response headers from the backend server to the original response, including CORS headers
+        exchange.getResponseHeaders().putAll(connection.getHeaderFields());
 
         // Copy headers from the original request to the forwarded request
         exchange.getRequestHeaders().entrySet().forEach(entry -> {
