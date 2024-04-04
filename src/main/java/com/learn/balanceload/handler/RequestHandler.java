@@ -19,6 +19,8 @@ public class RequestHandler implements HttpHandler {
         backendServers.add("http://localhost:8081");
 
         String response = "My Name is Captain Jeppo";
+        // Get the request path without including "/api"
+        String requestPath = exchange.getRequestURI().getPath().replaceFirst("/api", "");
 
         // Set response headers
         exchange.getResponseHeaders().set("Content-Type", "text/plain");
@@ -29,12 +31,13 @@ public class RequestHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
 
-        String requestURI = exchange.getRequestURI().toString();
+        //String requestURI = exchange.getRequestURI().toString();
         String targetServer = getNextServer();
-        String targetURL = targetServer + requestURI;
+        String targetURL = targetServer + requestPath;
 
         // Print the target URL before forwarding the request
         System.out.println("Forwarding request to backend server: " + targetURL);
+        System.out.println("request path :" + requestPath);
 
         // Forward request to backend server
         LoadBalancer.forwardRequest(targetURL, exchange);
